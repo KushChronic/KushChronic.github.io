@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kush Chronic | Premium Dispensary</title>
+    <style>
+        :root {
+            --bg-color: #0c0f0c;
+            --text-color: #f0f4f0;
+            --accent-color: #2ecc71;
+            --card-bg: #161b16;
+            --border-color: #253025;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        header {
+            background-color: #111611;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 26px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-color);
+        }
+
+        .cart-icon {
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            background: var(--accent-color);
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 20px;
+        }
+
+        .category-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px auto 10px;
+            max-width: 1200px;
+            padding: 0 20px;
+        }
+
+        .tab-btn {
+            background: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover, .tab-btn.active {
+            background-color: var(--accent-color);
+            color: #000;
+            border-color: var(--accent-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto 40px;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .category-nav {
+                flex-wrap: wrap;
+            }
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-color);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 160px;
+            background-color: #1e251e;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .product-card h3 {
+            margin: 10px 0 5px;
+            font-size: 18px;
+        }
+
+        .product-desc {
+            font-size: 13px;
+            color: #aaa;
+            margin: 0 0 12px 0;
+            min-height: 34px;
+        }
+
+        .product-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-bottom: 12px;
+        }
+
+        .btn-add {
+            background-color: transparent;
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .btn-add:hover {
+            background-color: var(--accent-color);
+            color: #000;
+        }
+
+        .sidebar-cart {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-cart h2 {
+            margin-top: 0;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .cart-items {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 14px;
+        }
+
+        .cart-item button {
+            background: none;
+            border: none;
+            color: #ff5252;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .payment-methods-box {
+            margin: 15px 0;
+            border-top: 1px dashed var(--border-color);
+            padding-top: 15px;
+        }
+
+        .payment-methods-box label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .payment-methods-box input[type="radio"] {
+            margin-right: 8px;
+            accent-color: var(--accent-color);
+        }
+
+        .cart-total {
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .btn-checkout {
+            background-color: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 4px;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn-checkout:disabled {
+            background-color: #333;
+            color: #777;
+            cursor: not-allowed;
+            opacity: 1;
+        }
+
+        /* --- POPUPS & SCROLLABLE MODALS --- */
+        .checkout-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: flex-start; 
+            overflow-y: auto;        
+            padding: 20px 0;
+        }
+
+        .modal-content {
+            background-color: #111;
+            width: 95%;
+            max-width: 700px; 
+            height: 90vh; 
+            margin-top: 10px;        
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0px 10px 30px rgba(0,0,0,0.7);
+        }
+
+        .weight-modal-size {
+            max-width: 450px;
+            height: auto;
+            max-height: 85vh;
+        }
+
+        .modal-header {
+            background-color: #161b16;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: var(--text-color);
+        }
+
+        .close-modal-btn {
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 28px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-modal-btn:hover {
+            color: #ff5252;
+        }
+
+        .iframe-wrapper {
+            flex-grow: 1;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;        
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .checkout-iframe {
+            width: 100%;
+            height: 100%;
+            min-height: 750px;       
+            border: none;
+            background-color: #111411; 
+        }
+
+        .formspree-body {
+            padding: 30px;
+            overflow-y: auto;
+            color: #fff;
+        }
+
+        .formspree-body label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .formspree-body input, .formspree-body textarea {
+            width: 100%;
+            padding: 12px;
+            background: #222;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: #fff;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        .formspree-body textarea {
+            height: 100px;
+            resize: none;
+        }
+
+        .btn-submit-order {
+            background-color: var(--accent-color);
+            color: #000;
+            border: none;
+            padding: 14px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        /* --- WEIGHT VARIATION SELECTION UI --- */
+        .weight-selector-body {
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .weight-option-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1c221c;
+            border: 1px solid var(--border-color);
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .weight-option-row:hover:not(.disabled-row) {
+            border-color: var(--accent-color);
+            background: #222a22;
+        }
+
+        .weight-option-row input[type="radio"] {
+            accent-color: var(--accent-color);
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        .disabled-row {
+            opacity: 0.35;
+            cursor: not-allowed;
+            background: #111;
+        }
+
+        .out-of-stock-badge {
+            color: #ff5252;
+            font-weight: bold;
+            font-size: 12px;
+            text-transform: uppercase;
+            border: 1px solid #ff5252;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Kush Chronic</h1>
+        <div class="cart-icon">Cart (<span id="cart-count">0</span>)</div>
+    </header>
+
+    <nav class="category-nav">
+        <button class="tab-btn active" onclick="filterCategory('all', this)">All Products</button>
+        <button class="tab-btn" onclick="filterCategory('flower', this)">Flower</button>
+        <button class="tab-btn" onclick="filterCategory('concentrates', this)">Concentrates</button>
+        <button class="tab-btn" onclick="filterCategory('edibles', this)">Edibles</button>
+        <button class="tab-btn" onclick="filterCategory('vapes', this)">Vapes</button>
+    </nav>
+
+    <div class="container">
+        <main class="products-grid" id="catalog-container">
+        </main>
+
+        <aside class="sidebar-cart">
+            <h2>Your Order</h2>
+            <ul class="cart-items" id="cart-items-list">
+            </ul >
+
+            <div class="payment-methods-box">
+                <strong>Select Delivery Method:</strong>
+                <label style="margin-top: 10px;">
+                    <input type="radio" name="payMethod" value="pickup" checked> Cash on Pickup
+                </label>
+                <label>
+                    <input type="radio" name="payMethod" value="online"> E-Transfer / Crypto Portal
+                </label>
+            </div>
+
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cart-total-amount">$0.00</span>
+            </div>
+            <button class="btn-checkout" id="main-checkout-btn" onclick="handleCheckout()">Complete Purchase</button>
+        </aside>
+    </div>
+
+    <div class="checkout-overlay" id="weight-window-overlay">
+        <div class="modal-content weight-modal-size">
+            <div class="modal-header">
+                <h3 id="weight-modal-title">Select Quantity</h3>
+                <button class="close-modal-btn" onclick="closeOverlayWindow('weight-window-overlay')">&times;</button>
+            </div>
+            <div class="weight-selector-body" id="weight-options-container">
+            </div>
+            <div style="padding: 0 25px 25px 25px;">
+                <button class="btn-submit-order" id="add-selected-weight-btn" onclick="confirmWeightAdd()">Add To Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="checkout-overlay" id="iframe-window-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Secure Gateway Payment</h3>
+                <button class="close-modal-btn" onclick="closeOverlayWindow('iframe-window-overlay')">&times;</button>
+            </div>
+            <div class="iframe-wrapper">
+                <iframe src="about:blank" class="checkout-iframe" id="checkout-frame"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <div class="checkout-overlay" id="formspree-window-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Cash Pickup Details</h3>
+                <button class="close-modal-btn" onclick="closeOverlayWindow('formspree-window-overlay')">&times;</button>
+            </div>
+            
+            <form action="https://formspree.io/f/xjglnabo" method="POST" class="formspree-body">
+                <label for="cust-name">Full Name:</label>
+                <input type="text" name="name" id="cust-name" placeholder="John Doe" required>
+
+                <label for="cust-phone">Phone Number:</label>
+                <input type="tel" name="phone" id="cust-phone" placeholder="(416) 555-0199" required>
+
+                <input type="hidden" name="Total Order Value" id="hidden-total">
+                <label for="cust-manifest">Items Ordered:</label>
+                <textarea name="manifest" id="cust-manifest" readonly></textarea>
+
+                <button type="submit" class="btn-submit-order">Submit Pickup Order</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // GLOBAL SETTING: Insert your Formspree Endpoint Form Token key below
+        const FORMSPREE_ID = "xjglnabo";
+
+        const products = [
+            { 
+                id: 1, 
+                category: "flower", 
+                name: "OG Kush", 
+                desc: "Classic Indica with an earthy pine aroma. THC% IS 30%-34%.", 
+                img: "",
+                variations: [
+                    { label: "1 Gram", price: 12.00, inStock: true },
+                    { label: "3.5 Grams (Eighth)", price: 19.00, inStock: true },
+                    { label: "7 Grams (Quarter)", price: 35.00, inStock: true },
+                    { label: "14 Grams (Half Oz)", price: 55.00, inStock: true },
+                    { label: "28 Grams (Full Oz)", price: 105.00, inStock: true }
+                ]
+            },
+            { 
+                id: 2, 
+                category: "flower", 
+                name: "Sour Diesel", 
+                desc: "Fast-acting Sativa with an energizing lift. THC% IS 30%-32%.", 
+                img: "",
+                variations: [
+                    { label: "1 Gram", price: 14.00, inStock: true },
+                    { label: "3.5 Grams (Eighth)", price: 20.00, inStock: true },
+                    { label: "7 Grams (Quarter)", price: 35.00, inStock: true },
+                    { label: "14 Grams (Half Oz)", price: 50.00, inStock: true },
+                    { label: "28 Grams (Full Oz)", price: 95.00, inStock: true }
+                ]
+            },
+            { 
+                id: 3, 
+                category: "flower", 
+                name: "Granddaddy Purple", 
+                desc: "Deep featuring Indica sweet grape notes. THC% IS 27%-30%.", 
+                img: "",
+                variations: [
+                    { label: "1 Gram", price: 12.00, inStock: true },
+                    { label: "3.5 Grams (Eighth)", price: 21.00, inStock: true },
+                    { label: "7 Grams (Quarter)", price: 31.00, inStock: true },
+                    { label: "14 Grams (Half Oz)", price: 63.00, inStock: true },
+                    { label: "28 Grams (Full Oz)", price: 103.00, inStock: true }
+                ]
+            },
+            { 
+                id: 4, 
+                category: "flower", 
+                name: "Blue Dream", 
+                desc: "Balanced hybrid great for daytime focus. THC% IS 29%-30%.", 
+                img: "",
+                variations: [
+                    { label: "1 Gram", price: 12.00, inStock: true },
+                    { label: "3.5 Grams (Eighth)", price: 25.00, inStock: true },
+                    { label: "7 Grams (Quarter)", price: 40.00, inStock: true },
+                    { label: "14 Grams (Half Oz)", price: 70.00, inStock: true },
+                    { label: "28 Grams (Full Oz)", price: 100.00, inStock: true }
+                ]
+            },
+            { 
+                id: 5, 
+                category: "flower", 
+                name: "Gelato #41", 
+                desc: "Dessert-like aroma, heavy-hitting hybrid. THC% IS 30%.", 
+                img: "",
+                variations: [
+                    { label: "1 Gram", price: 15.00, inStock: true },
+                    { label: "3.5 Grams (Eighth)", price: 25.00, inStock: true },
+                    { label: "7 Grams (Quarter)", price: 35.00, inStock: true },
+                    { label: "14 Grams (Half Oz)", price: 65.00, inStock: true },
+                    { label: "28 Grams (Full Oz)", price: 105.00, inStock: true }
+                ]
+            },
+            { id: 11, category: "edibles", name: "Sour Gummies", price: 20.00, desc: "100mg THC per package / 10mg per piece.", img: "" },
+            { id: 12, category: "edibles", name: "Chocolate Bar", price: 35.00, desc: "Artisanal Belgian chocolate infused with 300mg of THC.", img: "" },
+            { id: 13, category: "edibles", name: "sour strips Bites", price: 18.00, desc: "Rich and soft, classic baked experience 150mg 10mg of THC per piece .", img: "" },
+            { id: 16, category: "vapes", name: "Gas gang premium pen Bruce Banner 2G", price: 40.00, desc: "Gas gang premium pens Bruce Banner 2G.", img: "data:image/jpeg;base64,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" },
+            { id: 17, category: "vapes", name: "High Potency 95+ Purple Penjamin live resin Disposable 0.5g", price: 25.00, desc: "All-in-one ready-to-vape device (0.5g).", img: "https://images.dutchie.com/3a320bc1d9374cf2a3d1541779146216?auto=format%2Ccompress&cs=srgb&fit=fill&fill=solid&fillColor=%23fff&w=787.5&dpr=1&ixlib=react-9.8.1" },
+            { id: 18, category: "vapes", name: "Pink Pennifer live resin Disposable 0.5g", price: 25.00, desc: "Full spectrum taste All-in-one ready-to-vape device (0.5g).", img: "https://images.dutchie.com/3081c0da15301008fc20a296c7292c32?auto=format%2Ccompress&cs=srgb&fit=fill&fill=solid&fillColor=%23fff&w=787.5&dpr=1&ixlib=react-9.8.1" },
+            { id: 19, category: "vapes", name: "Gas gang premium pen gushers 2G", price: 40.00, desc: "Gas gang premium pens gushers 2G.", img: "data:image/jpeg;base64,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" },
+            { id: 20, category: "vapes", name: "The orange one cartridge live resin 1g", price: 45.00, desc: "Spicy herbal notes built for pure relaxation.", img: "https://images.dutchie.com/04c2e1f8a50cf43fd7bbc32ebeae7615?auto=format%2Ccompress&cs=srgb&fit=fill&fill=solid&fillColor=%23fff&w=787.5&dpr=1&ixlib=react-9.8.1" }
+        ];
+
+        let cart = [];
+        let currentFilter = 'all';
+        let activeFlowerProduct = null;
+
+        function renderCatalog() {
+            const container = document.getElementById('catalog-container');
+            container.innerHTML = '';
+            const filtered = products.filter(p => currentFilter === 'all' || p.category === currentFilter);
+
+            filtered.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                const imgElement = p.img 
+                    ? `<img src="${p.img}" class="product-image" alt="${p.name}">` 
+                    : `<div class="product-image">[ Image Pending ]</div>`;
+
+                const priceDisplay = p.category === 'flower' 
+                    ? `$${p.variations[0].price.toFixed(2)} - $${p.variations[p.variations.length - 1].price.toFixed(2)}`
+                    : `$${p.price.toFixed(2)}`;
+
+                card.innerHTML = `
+                    <div>
+                        ${imgElement}
+                        <h3>${p.name}</h3>
+                        <p class="product-desc">${p.desc}</p>
+                    </div>
+                    <div>
+                        <div class="product-price">${priceDisplay}</div>
+                        <button class="btn-add" onclick="handleAddToCartClick(${p.id})">Add to Cart</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterCategory(category, element) {
+            currentFilter = category;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            renderCatalog();
+        }
+
+        function handleAddToCartClick(id) {
+            const product = products.find(p => p.id === id);
+            if (product.category === 'flower') {
+                openWeightModal(product);
+            } else {
+                executeAddtoCartState(product.id, product.name, product.price);
+            }
+        }
+
+        function openWeightModal(product) {
+            activeFlowerProduct = product;
+            document.getElementById('weight-modal-title').innerText = `Select Weight: ${product.name}`;
+            
+            const optionsContainer = document.getElementById('weight-options-container');
+            optionsContainer.innerHTML = '';
+
+            product.variations.forEach((v, index) => {
+                const row = document.createElement('label');
+                row.className = `weight-option-row ${!v.inStock ? 'disabled-row' : ''}`;
+                
+                const inputState = v.inStock ? '' : 'disabled';
+                const badgeElement = v.inStock ? '' : `<span class="out-of-stock-badge">Sold Out</span>`;
+
+                row.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <input type="radio" name="flowerWeight" value="${index}" ${inputState} ${v.inStock && index === 0 ? 'checked' : ''}>
+                        <span><strong>${v.label}</strong></span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <span>$${v.price.toFixed(2)}</span>
+                        ${badgeElement}
+                    </div>
+                `;
+                optionsContainer.appendChild(row);
+            });
+
+            document.getElementById('weight-window-overlay').style.display = 'flex';
+        }
+
+        function confirmWeightAdd() {
+            const selectedRadio = document.querySelector('input[name="flowerWeight"]:checked');
+            if (!selectedRadio) {
+                alert("Please select an available option.");
+                return;
+            }
+
+            const variationIndex = parseInt(selectedRadio.value);
+            const variation = activeFlowerProduct.variations[variationIndex];
+            const extendedCartName = `${activeFlowerProduct.name} (${variation.label})`;
+            const compoundId = `${activeFlowerProduct.id}-${variationIndex}`;
+
+            executeAddtoCartState(compoundId, extendedCartName, variation.price);
+            closeOverlayWindow('weight-window-overlay');
+        }
+
+        function executeAddtoCartState(cartId, name, price) {
+            const existingItem = cart.find(item => item.id === cartId);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ id: cartId, name: name, price: price, quantity: 1 });
+            }
+            updateCartUI();
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            updateCartUI();
+        }
+
+        function calculateTotal() {
+            return cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2);
+        }
+
+        function updateCartUI() {
+            const listElement = document.getElementById('cart-items-list');
+            const countElement = document.getElementById('cart-count');
+            const totalElement = document.getElementById('cart-total-amount');
+
+            listElement.innerHTML = '';
+            let totalItems = 0;
+
+            cart.forEach(item => {
+                totalItems += item.quantity;
+                const li = document.createElement('li');
+                li.className = 'cart-item';
+                li.innerHTML = `
+                    <div>
+                        <strong>${item.name}</strong> x${item.quantity}<br>
+                        <small>$${(item.price * item.quantity).toFixed(2)}</small>
+                    </div>
+                    <button onclick="removeFromCart('${item.id}')">×</button>
+                `;
+                listElement.appendChild(li);
+            });
+
+            countElement.innerText = totalItems;
+            totalElement.innerText = `$${calculateTotal()}`;
+        }
+
+        function getCartManifestText() {
+            return cart.map(item => `${item.name} (Qty: ${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`).join('\n');
+        }
+
+        function handleCheckout() {
+            const finalAmount = calculateTotal();
+            const checkoutButton = document.getElementById('main-checkout-btn');
+
+            if (parseFloat(finalAmount) <= 0) {
+                alert("Please add items to your cart before checking out.");
+                return;
+            }
+
+            const selectedMethod = document.querySelector('input[name="payMethod"]:checked').value;
+
+            if (selectedMethod === 'online') {
+                checkoutButton.innerText = "Processing Order Tracking...";
+                checkoutButton.disabled = true;
+
+                fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: "new potential orders came", 
+                        manifest: getCartManifestText(),
+                        total: `$${finalAmount}`,
+                        paymentMethod: "E-Transfer / Crypto"
+                    })
+                })
+                .then(() => {
+                    checkoutButton.innerText = "Complete Purchase";
+                    checkoutButton.disabled = false;
+
+                    const baseUrl = "https://flashgroweb.github.io/pos/onlpay.html";
+                    const targetUrl = `${baseUrl}?amt=${finalAmount}&id=1`;
+
+                    const overlay = document.getElementById('iframe-window-overlay');
+                    const iframe = document.getElementById('checkout-frame');
+
+                    iframe.src = targetUrl;
+                    overlay.style.display = 'flex';
+                })
+                .catch(err => {
+                    console.error("Tracking Error: ", err);
+                    checkoutButton.innerText = "Complete Purchase";
+                    checkoutButton.disabled = false;
+                    
+                    alert("Order log network delay. Loading payment portal anyway...");
+                    const baseUrl = "https://flashgroweb.github.io/pos/onlpay.html";
+                    document.getElementById('checkout-frame').src = `${baseUrl}?amt=${finalAmount}&id=1`;
+                    document.getElementById('iframe-window-overlay').style.display = 'flex';
+                });
+
+            } else {
+                document.getElementById('hidden-total').value = `$${finalAmount}`;
+                document.getElementById('cust-manifest').value = getCartManifestText() + `\n\nGrand Total: $${finalAmount}`;
+                document.getElementById('formspree-window-overlay').style.display = 'flex';
+            }
+        }
+
+        function closeOverlayWindow(overlayId) {
+            const overlay = document.getElementById(overlayId);
+            overlay.style.display = 'none';
+            
+            if (overlayId === 'iframe-window-overlay') {
+                document.getElementById('checkout-frame').src = 'about:blank';
+            }
+        }
+
+        // Run UI Initialization on execution load
+        renderCatalog();
+    </script>
+</body>
+</html>
